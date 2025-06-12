@@ -2,20 +2,101 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ini styling slider volume video */
+.custom-slider {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 9999px;
+  outline: none;
+  cursor: pointer;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Track (Chrome, Safari) */
+.custom-slider::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: 9999px;
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+/* Thumb (Chrome, Safari) */
+.custom-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background-color: #edbe9f;
+  margin-top: -5px; /* supaya thumb pas di tengah track */
+  cursor: pointer;
+  border: none;
+}
+
+/* Firefox */
+.custom-slider::-moz-range-track {
+  height: 6px;
+  border-radius: 9999px;
+}
+
+.custom-slider::-moz-range-thumb {
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background-color: #edbe9f;
+  border: none;
+  cursor: pointer;
+}
+
+.custom-slider {
+  transition: all 0.2s ease-in-out;
+}
+
+/* font */
+
+@font-face {
+  font-family: "Norman";
+  src: url("/fonts/Norman-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "StopSN";
+  src: url("/fonts/StopSN-Display.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "CustomFont";
+  src: url("/fonts/Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "CustomFont";
+  src: url("/fonts/Semi-Bold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "CustomFont";
+  src: url("/fonts/Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "CustomFont";
+  src: url("/fonts/Light.woff2") format("woff2");
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "CustomFont";
+  src: url("/fonts/Regular-Italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
 }
