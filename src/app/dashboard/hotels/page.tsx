@@ -21,6 +21,7 @@ export default function Hotels() {
   const [formLebar, setFormLebar] = useState<string>("w-0");
   const [formTinggi, setFormTinggi] = useState<string>("h-0");
   const [ada, setAda] = useState("hidden");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleClickBukaKanan = () => {
     if (formLebar == "w-0") {
@@ -66,16 +67,32 @@ export default function Hotels() {
   const deleteHotel = async (hotel: Hotel) => {
     const supabase = createClient();
 
-    // Hapus dari database
+    const { data: relatedPackages, error: checkError } = await supabase
+      .from("package")
+      .select("id")
+      .or(`hotel_makkah_id.eq.${hotel.id},hotel_madinah_id.eq.${hotel.id}`);
+
+    if (checkError) {
+      console.error("Gagal memeriksa relasi hotel:", checkError);
+      setErrorMessage("Terjadi kesalahan saat memeriksa relasi data.");
+      return;
+    }
+
+    if (relatedPackages.length > 0) {
+      setErrorMessage(
+        "Hotel ini masih digunakan dalam paket perjalanan dan tidak bisa dihapus."
+      );
+      return;
+    }
+
     const { error } = await supabase.from("hotels").delete().eq("id", hotel.id);
 
     if (error) {
       console.error("Gagal hapus hotel:", error);
-      alert("Gagal menghapus hotel.");
+      setErrorMessage("Gagal menghapus hotel.");
       return;
     }
 
-    // Hapus gambar dari storage (opsional)
     const imagePaths = hotel.images.map((url) => url.split("/").pop() || "");
     const { error: storageError } = await supabase.storage
       .from("hotel-images")
@@ -85,9 +102,8 @@ export default function Hotels() {
       console.warn("Gambar tidak bisa dihapus dari storage:", storageError);
     }
 
-    // Update state hotels setelah hapus
     setHotels((prev) => prev.filter((h) => h.id !== hotel.id));
-    setConfirmDelete(null); // tutup modal
+    setConfirmDelete(null);
   };
 
   // Handler tombol hapus klik, buka modal konfirmasi
@@ -102,6 +118,19 @@ export default function Hotels() {
 
   return (
     <>
+      {errorMessage && (
+        <div className="bg-red-100 text-red-600 p-3 mb-4 mx-5 rounded-sm flex justify-between items-center">
+          <span>{errorMessage}</span>
+          <button
+            onClick={() => setErrorMessage("")}
+            className="text-red-500 hover:text-red-700 font-bold ml-4"
+            aria-label="Close alert"
+          >
+            ×
+          </button>
+        </div>
+      )}
+
       <div className="w-full sm:flex-row flex-col flex">
         <div
           className={`w-full sm:hidden block ${formTinggi} duration-500 transition-all bg-white`}

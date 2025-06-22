@@ -59,16 +59,16 @@ export default function CardSearchPackage() {
   return (
     <>
       {/* versi desktop */}
-      <div className="lg:flex border hidden flex-row lg:flex-col justify-between w-[750px] h-[67px]  lg:w-[323px] lg:h-[494px] rounded-sm absolute right-[15%]   lg:translate-x-0  top-1/2 -translate-y-1/2 bg-base lg:-right-12 p-6">
+      <div className="lg:flex border z-20 hidden flex-row lg:flex-col justify-between w-[750px] h-[67px]  lg:w-[323px] lg:h-[494px] rounded-sm absolute right-[15%]   lg:translate-x-0  top-1/2 -translate-y-1/2 bg-base lg:-right-12 p-6">
         <div className="flex items-center flex-row lg:flex-col  gap-0 lg:gap-4">
-          <h1 className="lg:block hidden text-dark text-xl  font-custom font-medium">
+          <h1 className="lg:block hidden text-dark text-xl  font-custom font-bold">
             Cari paket ibadah terbaik
           </h1>
 
-          <div className="w-full  h-[43px] flex gap-2">
+          <div className="w-full font-semibold  h-[43px] flex gap-2">
             <button
               onClick={() => handlePilihIbadah("umroh")}
-              className={`border-2 transition-all duration-75 font-custom text-sm rounded-sm h-full w-1/2 flex p-4 items-center justify-center
+              className={`border-2 transition-all duration-75 font-custom  text-sm rounded-sm h-full w-1/2 flex p-4 items-center justify-center
           ${
             selected === "umroh"
               ? "bg-accent  border-accent underline [text-underline-offset:4px]"
@@ -80,7 +80,7 @@ export default function CardSearchPackage() {
 
             <button
               onClick={() => handlePilihIbadah("haji")}
-              className={`border-2 transition-all duration-75 font-custom text-sm rounded-sm h-full w-1/2 flex p-4 items-center justify-center
+              className={`border-2 transition-all duration-75 font-custom  text-sm rounded-sm h-full w-1/2 flex p-4 items-center justify-center
           ${
             selected === "haji"
               ? "bg-accent  border-accent underline [text-underline-offset:4px]"
@@ -92,8 +92,12 @@ export default function CardSearchPackage() {
           </div>
 
           <div className="w-full lg:flex  hidden justify-between mt-2">
-            <div className="w-1/2 font-custom text-sm">Keberangkatan</div>
-            <div className="w-1/2 font-custom text-sm">Jenis paket</div>
+            <div className="w-1/2 font-custom text-center font-bold text-sm">
+              Keberangkatan
+            </div>
+            <div className="w-1/2 font-custom text-center font-bold text-sm">
+              Jenis paket
+            </div>
           </div>
 
           <div className="w-full flex justify-between pb-5 border-b-none  lg:border-b-[1.5px] border-accent">
@@ -160,7 +164,7 @@ export default function CardSearchPackage() {
 
       {/* versi menengah - mobile */}
 
-      <div className="w-11/12  pr-2 lg:hidden justify-between items-center flex md:w-[750px] absolute left-1/2 bg-white rounded-md -top-8 -translate-x-1/2 h-[67px] ">
+      <div className="w-11/12 z-20  pr-2 lg:hidden justify-between items-center flex md:w-[750px] absolute left-1/2 bg-white rounded-md -top-8 -translate-x-1/2 h-[67px] ">
         <div className="md:hidden absolute -top-11 flex w-full">
           <button
             onClick={() => handlePilihIbadah("umroh")}
@@ -297,7 +301,7 @@ export default function CardSearchPackage() {
                 </div>
                 <div
                   ref={mobileDropdownRef}
-                  className={`md:hidden flex absolute rounded-sm top-10 left-1/4 w-[271px] bg-white py-2 opacity-0 animate-fadeIn  flex-col justify-between items-center`}
+                  className={`md:hidden  flex absolute rounded-sm  top-10 left-1/2 -translate-x-1/2 w-[271px] bg-white py-2 opacity-0 animate-fadeIn  flex-col justify-between items-center`}
                 >
                   <h1 className="font-custom font-bold mb-2">
                     {selectedChoose}
@@ -350,7 +354,7 @@ export default function CardSearchPackage() {
                 </div>
                 <div
                   ref={mobileDropdownRef}
-                  className={` absolute  rounded-sm  left-1/4 top-10 w-[271px] bg-white py-2 opacity-0 animate-fadeIn  md:hidden flex flex-col justify-between items-center`}
+                  className={` absolute  rounded-sm  left-1/2 -translate-x-1/2  top-10 w-[271px] bg-white py-2 opacity-0 animate-fadeIn  md:hidden flex flex-col justify-between items-center`}
                 >
                   <h1 className="font-custom font-bold mb-2">
                     {selectedChoose}

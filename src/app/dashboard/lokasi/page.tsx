@@ -20,6 +20,8 @@ export default function Lokasi() {
   const [locations, setLocations] = useState<Location[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState<Location | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   // Toggle form kanan (desktop)
   const handleClickBukaKanan = () => {
@@ -53,18 +55,35 @@ export default function Lokasi() {
   }, []);
 
   // Hapus lokasi
-  async function handleDelete(id: string) {
-    const confirmHapus = confirm("Yakin ingin menghapus lokasi ini?");
-    if (!confirmHapus) return;
-
+  async function deleteLocation(location: Location) {
     try {
-      const res = await fetch(`/api/locations/${id}`, { method: "DELETE" });
-      if (!res.ok) throw new Error("Gagal menghapus lokasi.");
+      const res = await fetch(`/api/locations/${location.id}`, {
+        method: "DELETE",
+      });
 
-      setLocations((prev) => prev.filter((loc) => loc.id !== id));
+      const data = await res.json(); // cukup 1x
+
+      if (res.status === 409) {
+        setErrorMessage(data.error); // tampilkan pesan "masih digunakan"
+        return;
+      }
+
+      if (!res.ok) {
+        setErrorMessage(data.error || "Gagal menghapus lokasi.");
+        return;
+      }
+
+      // Jika berhasil hapus
+      setLocations((prev) => prev.filter((loc) => loc.id !== location.id));
     } catch (err) {
-      alert(err instanceof Error ? err.message : String(err));
+      setErrorMessage(err instanceof Error ? err.message : String(err));
+    } finally {
+      setConfirmDelete(null); // tutup popup konfirmasi
     }
+  }
+
+  function cancelDelete() {
+    setConfirmDelete(null);
   }
 
   // Tambahkan lokasi baru (callback dari <FormLocation />)
@@ -96,6 +115,18 @@ export default function Lokasi() {
 
       {/* List dan tombol */}
       <div className="w-full">
+        {errorMessage && (
+          <div className="bg-red-100 text-red-600 p-3 mb-4 mx-5 rounded-sm flex justify-between items-center">
+            <span>{errorMessage}</span>
+            <button
+              onClick={() => setErrorMessage("")}
+              className="text-red-500 hover:text-red-700 font-bold ml-4"
+              aria-label="Close alert"
+            >
+              ×
+            </button>
+          </div>
+        )}
         <div className="flex items-center justify-between px-5 pt-4">
           <h1 className="font-stopsn text-lg font-bold">Locations</h1>
 
@@ -140,7 +171,7 @@ export default function Lokasi() {
                   </p>
                 </div>
                 <button
-                  onClick={() => handleDelete(loc.id)}
+                  onClick={() => setConfirmDelete(loc)}
                   className="w-7 h-7 bg-primary hover:border-accent border-transparent border-2 rounded-full flex items-center justify-center"
                   aria-label="Delete location"
                 >
@@ -168,6 +199,31 @@ export default function Lokasi() {
           </div>
         </div>
       </div>
+      {confirmDelete && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white mx-5 p-3 rounded shadow-lg max-w-sm w-full">
+            <h2 className="text-lg font-bold mb-4">Konfirmasi Hapus</h2>
+            <p>
+              Apakah kamu yakin ingin menghapus lokasi{" "}
+              <b>{confirmDelete.name}</b>?
+            </p>
+            <div className="mt-6 flex justify-end gap-4">
+              <button
+                onClick={cancelDelete}
+                className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+              >
+                Batal
+              </button>
+              <button
+                onClick={() => deleteLocation(confirmDelete)}
+                className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+              >
+                Hapus
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

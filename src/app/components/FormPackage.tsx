@@ -23,8 +23,14 @@ interface Pesawat {
   kode_pesawat: string;
 }
 
-export default function FormPerjalanan() {
+interface FormPackageProps {
+  onSuccessSubmit?: () => void;
+}
+
+export default function FormPerjalanan({ onSuccessSubmit }: FormPackageProps) {
   const [form, setForm] = useState({
+    title: "",
+    day: 0,
     tanggalKeberangkatan: "",
     hotelMakkah: "",
     hotelMadinah: "",
@@ -33,7 +39,9 @@ export default function FormPerjalanan() {
     bandaraAwal: "",
     bandaraTransit: "",
     bandaraTiba: "",
+    price: "",
   });
+  const [loading, setLoading] = useState(false);
 
   const [hotelMakkahList, setHotelMakkahList] = useState<Hotel[]>([]);
   const [hotelMadinahList, setHotelMadinahList] = useState<Hotel[]>([]);
@@ -50,10 +58,10 @@ export default function FormPerjalanan() {
         const data: Hotel[] = await res.json();
 
         setHotelMakkahList(
-          data.filter((h) => h.city.toLowerCase() === "makkah")
+          data?.filter((h) => h.city.toLowerCase() === "makkah")
         );
         setHotelMadinahList(
-          data.filter((h) => h.city.toLowerCase() === "madinah")
+          data?.filter((h) => h.city.toLowerCase() === "madinah")
         );
       } catch (error) {
         console.error("Failed to fetch hotels", error);
@@ -111,7 +119,11 @@ export default function FormPerjalanan() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
+    setLoading(true);
+
     const formData = new FormData();
+    formData.append("title", form.title);
+    formData.append("day", form.day.toString());
     formData.append("tanggal_keberangkatan", form.tanggalKeberangkatan);
     formData.append("hotel_makkah_id", form.hotelMakkah);
     formData.append("hotel_madinah_id", form.hotelMadinah);
@@ -119,6 +131,7 @@ export default function FormPerjalanan() {
     formData.append("bandara_awal_id", form.bandaraAwal);
     formData.append("transit_id", form.bandaraTransit || "");
     formData.append("bandara_tiba_id", form.bandaraTiba);
+    formData.append("price", form.price);
 
     if (imageFile) {
       formData.append("image", imageFile);
@@ -129,8 +142,40 @@ export default function FormPerjalanan() {
       body: formData,
     });
 
-    const result = await res.json();
-    console.log("Respon:", result);
+    // const result = await res.json();
+    // console.log("Respon:", result);
+
+    if (!res.ok) {
+      const errorText = await res.text();
+      alert("Gagal submit: " + errorText);
+      return;
+    }
+
+    if (res.ok) {
+      alert("Paket berhasil dibuat!");
+      setForm({
+        title: "",
+        day: 0,
+        tanggalKeberangkatan: "",
+        hotelMakkah: "",
+        hotelMadinah: "",
+        pesawat: "",
+        transit: "",
+        bandaraAwal: "",
+        bandaraTransit: "",
+        bandaraTiba: "",
+        price: "",
+      });
+      setImageFile(null);
+      setImagePreview(null);
+
+      // 🔥 Panggil callback setelah submit sukses
+      if (onSuccessSubmit) {
+        onSuccessSubmit();
+      }
+    }
+
+    setLoading(false);
   }
 
   return (
@@ -167,6 +212,34 @@ export default function FormPerjalanan() {
           </div>
         )}
       </div>
+      {/* Nama package */}
+      <div>
+        <label className="block font-bold mb-1">
+          Nama Paket <span className="text-red-500">*</span>
+        </label>
+        <input
+          type="text"
+          name="title"
+          value={form.title}
+          onChange={handleChange}
+          required
+          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+      {/* berapa hari */}
+      <div>
+        <label className="block font-bold mb-1">
+          Berapa hari <span className="text-red-500">*</span>
+        </label>
+        <input
+          type="number"
+          name="day"
+          value={form.day}
+          onChange={handleChange}
+          required
+          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
       {/* Tanggal Keberangkatan */}
       <div>
         <label className="block font-bold mb-1">
@@ -196,8 +269,8 @@ export default function FormPerjalanan() {
         >
           <option value="">Pilih hotel Makkah</option>
           {hotelMakkahList.map((hotel) => (
-            <option key={hotel.id} value={hotel.id}>
-              {hotel.name}
+            <option key={hotel?.id} value={hotel?.id}>
+              {hotel?.name}
             </option>
           ))}
         </select>
@@ -307,11 +380,31 @@ export default function FormPerjalanan() {
         </select>
       </div>
 
+      {/* harga */}
+      <div>
+        <label className="block font-bold mb-1">
+          Harga <span className="text-red-500">*</span>
+        </label>
+        <input
+          type="number"
+          name="price"
+          value={form.price}
+          onChange={handleChange}
+          required
+          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+
       <button
         type="submit"
-        className="w-full bg-blue-600 text-white font-bold py-3 rounded-md hover:bg-blue-700 transition"
+        disabled={loading}
+        className={`w-full font-bold py-3 rounded-md transition ${
+          loading
+            ? "bg-gray-400 cursor-not-allowed"
+            : "bg-blue-600 text-white hover:bg-blue-700"
+        }`}
       >
-        Submit
+        {loading ? "Mengirim..." : "Submit"}
       </button>
     </form>
   );

@@ -57,6 +57,7 @@
   src: url("/fonts/Norman-Regular.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -64,6 +65,7 @@
   src: url("/fonts/StopSN-Display.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -71,6 +73,7 @@
   src: url("/fonts/Regular.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -78,6 +81,7 @@
   src: url("/fonts/Semi-Bold.woff2") format("woff2");
   font-weight: 600;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -85,6 +89,7 @@
   src: url("/fonts/Medium.woff2") format("woff2");
   font-weight: 500;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -92,6 +97,7 @@
   src: url("/fonts/Light.woff2") format("woff2");
   font-weight: 300;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -99,4 +105,14 @@
   src: url("/fonts/Regular-Italic.woff2") format("woff2");
   font-weight: 400;
   font-style: italic;
+  font-display: swap;
+}
+
+/* globals.css */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none; /* IE & Edge */
+  scrollbar-width: none; /* Firefox */
 }

@@ -21,26 +21,57 @@ export default function FormToggle({ children, data }: FormToggleProps) {
   const [ada, setAda] = useState("hidden");
   const [formTinggi, setFormTinggi] = useState("h-0");
   const [pesawatList, setPesawatList] = useState<Pesawat[]>(data || []);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [selectedPesawat, setSelectedPesawat] = useState<Pesawat | null>(null);
 
   useEffect(() => {
     setPesawatList(data || []);
   }, [data]);
 
-  const handleDelete = async (id: string) => {
-    const konfirmasi = confirm("Yakin ingin menghapus pesawat ini?");
-    if (!konfirmasi) return;
+  const handleDelete = (pesawat: Pesawat) => {
+    setSelectedPesawat(pesawat);
+    setShowConfirm(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!selectedPesawat) return;
 
     const supabase = createClient();
 
-    const { error } = await supabase.from("pesawat").delete().eq("id", id);
+    // Cek relasi
+    const { data: relatedPackages, error: checkError } = await supabase
+      .from("package")
+      .select("id")
+      .eq("pesawat_id", selectedPesawat.id);
 
-    if (error) {
-      alert("Gagal menghapus data: " + error.message);
+    if (checkError) {
+      setErrorMessage("Gagal memeriksa relasi pesawat.");
+      setShowConfirm(false);
       return;
     }
 
-    // Hapus dari UI
-    setPesawatList((prev) => prev.filter((item) => item.id !== id));
+    if (relatedPackages.length > 0) {
+      setErrorMessage("Pesawat masih digunakan di package.");
+      setShowConfirm(false);
+      return;
+    }
+
+    const { error } = await supabase
+      .from("pesawat")
+      .delete()
+      .eq("id", selectedPesawat.id);
+
+    if (error) {
+      setErrorMessage("Gagal menghapus data: " + error.message);
+      setShowConfirm(false);
+      return;
+    }
+
+    setPesawatList((prev) =>
+      prev.filter((item) => item.id !== selectedPesawat.id)
+    );
+    setShowConfirm(false);
   };
 
   const handleClickBukaKanan = () => {
@@ -65,8 +96,21 @@ export default function FormToggle({ children, data }: FormToggleProps) {
 
   return (
     <>
+      {errorMessage && (
+        <div className="bg-red-100 mx-4 text-red-600 p-3 mb-4 rounded-sm border border-red-300 flex justify-between items-center">
+          <span>{errorMessage}</span>
+          <button
+            onClick={() => setErrorMessage("")}
+            className="text-red-500 hover:text-red-700 font-bold ml-4"
+            aria-label="Close alert"
+          >
+            ×
+          </button>
+        </div>
+      )}
+
       <div
-        className={`w-full sm:hidden block ${formTinggi} border transition-all bg-white`}
+        className={`w-full sm:hidden block ${formTinggi}  transition-all bg-white`}
       >
         <div className={`w-full ${ada} p-5`}>
           <h1 className="font-stopsn">Input Pesawat</h1>
@@ -141,7 +185,7 @@ export default function FormToggle({ children, data }: FormToggleProps) {
                   </div>
 
                   <button
-                    onClick={() => handleDelete(p.id)}
+                    onClick={() => handleDelete(p)}
                     className="transition-all w-7 h-7 bg-primary focus:border-accent focus:bg-base hover:border-accent hover:border-2 focus:border-2 border-transparent rounded-full flex items-center justify-center"
                   >
                     <FiTrash className="text-secondary text-sm" />
@@ -152,7 +196,7 @@ export default function FormToggle({ children, data }: FormToggleProps) {
           </div>
         </div>
         <div
-          className={`h-screen hidden sm:block ${formLebar} border transition-all bg-white`}
+          className={`h-screen hidden sm:block ${formLebar}  transition-all bg-white`}
         >
           <div className={`w-full ${ada} p-5`}>
             <h1 className="font-stopsn">Input Pesawat</h1>
@@ -161,6 +205,32 @@ export default function FormToggle({ children, data }: FormToggleProps) {
           </div>
         </div>
       </div>
+
+      {showConfirm && selectedPesawat && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white mx-5 p-3 rounded shadow-lg max-w-sm w-full">
+            <h2 className="text-lg font-bold mb-4">Konfirmasi Hapus</h2>
+            <p>
+              Apakah kamu yakin ingin menghapus pesawat{" "}
+              <b>{selectedPesawat.nama_pesawat}</b>?
+            </p>
+            <div className="mt-6 flex justify-end gap-4">
+              <button
+                onClick={() => setShowConfirm(false)}
+                className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+              >
+                Batal
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+              >
+                Hapus
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

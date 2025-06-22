@@ -6,6 +6,7 @@ export async function POST(req: NextRequest) {
 
   const formData = await req.formData();
 
+  const title = formData.get("title") as string;
   const tanggal_keberangkatan = formData.get("tanggal_keberangkatan") as string;
   const hotel_makkah_id = formData.get("hotel_makkah_id") as string;
   const hotel_madinah_id = formData.get("hotel_madinah_id") as string;
@@ -13,6 +14,8 @@ export async function POST(req: NextRequest) {
   const bandara_awal_id = formData.get("bandara_awal_id") as string;
   const transit_id = formData.get("transit_id") as string;
   const bandara_tiba_id = formData.get("bandara_tiba_id") as string;
+  const price = formData.get("price") as string;
+  const day = parseInt(formData.get("day") as string, 10);
 
   const image = formData.get("image") as File | null;
   let image_package = "";
@@ -42,6 +45,8 @@ export async function POST(req: NextRequest) {
 
   const { data, error } = await supabase.from("package").insert([
     {
+      title,
+      day,
       tanggal_keberangkatan,
       hotel_makkah_id,
       hotel_madinah_id,
@@ -50,6 +55,7 @@ export async function POST(req: NextRequest) {
       transit_id: transit_id || null,
       bandara_tiba_id,
       image_package,
+      price,
     },
   ]);
 

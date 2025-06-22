@@ -2,9 +2,10 @@
 
 import FormPackage from "@/app/components/FormPackage";
 import { useEffect, useState } from "react";
-import { FiPlus } from "react-icons/fi";
+import { FiPlus, FiTrash } from "react-icons/fi";
 import { RiCloseLine } from "react-icons/ri";
 import Image from "next/image";
+import { createClient } from "@/utils/supabase/client";
 
 interface Hotel {
   id: number;
@@ -25,6 +26,8 @@ interface Pesawat {
 
 interface Package {
   id: string;
+  title: string;
+  day: number;
   tanggal_keberangkatan: string;
   hotel_makkah_id: number;
   hotel_madinah_id: number;
@@ -41,6 +44,7 @@ interface Package {
   transit?: Airport | null;
   bandara_tiba: Airport;
   image_package_url?: string;
+  price: string;
 }
 
 export default function Programs() {
@@ -54,21 +58,36 @@ export default function Programs() {
     }
   };
 
-  useEffect(() => {
-    async function fetchPackages() {
-      try {
-        const res = await fetch("/api/packages");
-        const data = await res.json();
-        setPackages(data);
-      } catch (error) {
-        console.error("Gagal mengambil data package", error);
-      }
+  const fetchPackages = async () => {
+    try {
+      const res = await fetch("/api/packages");
+      const data = await res.json();
+      setPackages(data);
+    } catch (error) {
+      console.error("Gagal mengambil data package", error);
     }
+  };
 
+  useEffect(() => {
     fetchPackages();
   }, []);
+  // console.log(packages);
 
-  console.log(packages);
+  const handleDelete = async (id: string) => {
+    const supabase = createClient();
+    const confirm = window.confirm("Yakin ingin menghapus paket ini?");
+    if (!confirm) return;
+
+    const { error } = await supabase.from("package").delete().eq("id", id);
+
+    if (error) {
+      console.error("Gagal menghapus paket:", error.message);
+      return;
+    }
+
+    // Update tampilan
+    setPackages((prev) => prev.filter((pkg) => pkg.id !== id));
+  };
 
   return (
     <>
@@ -94,7 +113,13 @@ export default function Programs() {
               <RiCloseLine className="text-secondary text-xs md:text-lg" />
             </button>
             <div className="p-4">
-              <FormPackage />
+              <FormPackage
+                onSuccessSubmit={() => {
+                  // console.log("Submit success");
+                  fetchPackages();
+                  setAda(false);
+                }}
+              />
             </div>
           </div>
         </div>
@@ -102,7 +127,7 @@ export default function Programs() {
 
       {/* tampilan datanya  */}
 
-      <div className="grid  grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+      <div className="grid font-custom  grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
         {packages.map((pkg) => (
           <div
             key={pkg.id}
@@ -116,6 +141,7 @@ export default function Programs() {
                 width={600}
                 height={200}
                 className="w-full h-full object-cover"
+                priority // <== ini yang penting
               />
             </div>
 
@@ -123,11 +149,12 @@ export default function Programs() {
               {/* Judul */}
               <h3 className="text-lg font-bold text-gray-800 mb-2 uppercase">
                 {/* {pkg.name_program == "" | null ? "" : pkg.name_program} */}
-                Title Programnya lupa
+                {pkg.title ? pkg.title : "Title Programnya lupa"}
               </h3>
+              <p className="ml-1">{pkg?.day} Hari</p>
 
               {/* Detail Program */}
-              <div className="space-y-2 text-sm text-gray-700">
+              <div className=" text-sm text-gray-700">
                 <div className="flex items-center gap-2">
                   <span className="text-red-600">
                     <i className="fas fa-calendar-alt" />
@@ -197,14 +224,20 @@ export default function Programs() {
               {/* Harga dan Tombol */}
               <div className="mt-4 flex items-center justify-between">
                 <p className="text-red-600 font-bold text-base">
-                  Rp{" "}
-                  {/* {Number(pkg.harga).toLocaleString("id-ID", {
-                    minimumFractionDigits: 0,
-                  })} */}
-                  00000
+                  {pkg.price
+                    ? new Intl.NumberFormat("id-ID", {
+                        style: "currency",
+                        currency: "IDR",
+                        minimumFractionDigits: 0,
+                      }).format(Number(pkg.price))
+                    : "Rp0"}
                 </p>
-                <button className="bg-red-600 hover:bg-red-700 text-white px-4 py-1 rounded-full text-sm">
-                  Hapus
+                <button
+                  onClick={() => handleDelete(pkg.id)}
+                  className="w-7 h-7 bg-primary hover:border-accent border-transparent border-2 rounded-full flex items-center justify-center"
+                  aria-label="Delete package"
+                >
+                  <FiTrash className="text-secondary text-sm" />
                 </button>
               </div>
             </div>

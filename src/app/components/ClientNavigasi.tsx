@@ -21,9 +21,7 @@ export default function NavigasiClient({ user }: Props) {
         >
           CHATOUR
         </Link>
-        <h1 className="font-stopsn md:block hidden text-accentt">
-          Tour Travel
-        </h1>
+
         <div className="flex gap-2">
           {!user ? (
             <>
