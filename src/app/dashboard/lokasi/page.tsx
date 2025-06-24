@@ -95,7 +95,10 @@ export default function Lokasi() {
   if (error) return <p className="p-4 text-red-500">Error: {error}</p>;
 
   return (
-    <div className="flex sm:flex-row flex-col w-full">
+    <div
+      className="flex sm:flex-row flex-col w-full"
+      style={{ backgroundImage: "url('/image/bg/noise.webp')" }}
+    >
       {/* Form atas (mobile) */}
       <div
         className={`w-full sm:hidden block ${formTinggi} duration-500 transition-all bg-white`}

@@ -119,7 +119,10 @@ export default function FormToggle({ children, data }: FormToggleProps) {
         </div>
       </div>
 
-      <div className="w-full px-5 pt-4 sm:hidden  flex items-center justify-between">
+      <div
+        className="w-full px-5 pt-4 sm:hidden  flex items-center justify-between"
+        style={{ backgroundImage: "url('/image/bg/noise.webp')" }}
+      >
         <h1 className="font-stopsn">Pesawat penerbangan</h1>
         <button
           onClick={handleClickBukaKanan}
@@ -143,7 +146,10 @@ export default function FormToggle({ children, data }: FormToggleProps) {
         </button>
       </div>
 
-      <div className="sm:flex hidden w-full">
+      <div
+        className="sm:flex hidden w-full"
+        style={{ backgroundImage: "url('/image/bg/noise.webp')" }}
+      >
         <div className="w-full">
           <div className="w-full px-5 pt-4 sm:flex hidden items-center justify-between">
             <h1 className="font-stopsn">Pesawat penerbangan</h1>

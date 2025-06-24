@@ -10,6 +10,10 @@ export default function TestimonialInput({
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false); // 🆕 Tambahan
+  const [statusMessage, setStatusMessage] = useState<{
+    type: "error" | "success";
+    message: string;
+  } | null>(null);
 
   const nameIsValid = name.length <= 20;
   const messageIsValid = message.trim().length >= 50;
@@ -21,25 +25,26 @@ export default function TestimonialInput({
 
     try {
       setIsSubmitting(true);
-      // Ambil IP address
+      setStatusMessage(null); // reset pesan
+
       const ipRes = await fetch("/api/ip-address");
       const ipData = await ipRes.json();
       const ip = ipData.ip || "unknown";
 
-      // Payload
       const payload = {
         name: finalName,
         message: message.trim(),
         ip_address: ip,
       };
 
-      // Validasi manual sebelum kirim
       if (payload.message.length < 50 || payload.name.length > 20) {
-        alert("Pesan minimal 50 karakter, nama maksimal 20 karakter.");
+        setStatusMessage({
+          type: "error",
+          message: "Pesan minimal 50 karakter, nama maksimal 20 karakter.",
+        });
         return;
       }
 
-      // Kirim ke API
       const res = await fetch("/api/testimonial", {
         method: "POST",
         headers: {
@@ -51,20 +56,30 @@ export default function TestimonialInput({
       const result = await res.json();
 
       if (!res.ok) {
-        // Tampilkan error dari API
-        alert(result.error || "Terjadi kesalahan saat mengirim testimonial.");
+        setStatusMessage({
+          type: "error",
+          message:
+            result.error ||
+            "Terjadi kesalahan saat mengirim testimonial. Coba lagi nanti.",
+        });
         return;
       }
 
-      alert("Testimonial berhasil dikirim!");
+      setStatusMessage({
+        type: "success",
+        message: "Testimonial berhasil dikirim!",
+      });
       setName("");
       setMessage("");
       onSuccess?.();
     } catch (error) {
       console.error("Gagal kirim:", error);
-      alert("Terjadi kesalahan saat mengirim testimonial. Silakan coba lagi.");
+      setStatusMessage({
+        type: "error",
+        message: "Terjadi kesalahan saat mengirim. Silakan coba lagi.",
+      });
     } finally {
-      setIsSubmitting(false); // ✅ Aktifkan kembali tombol
+      setIsSubmitting(false);
     }
   };
 
@@ -74,9 +89,9 @@ export default function TestimonialInput({
       <div className="mb-6">
         <div className="flex justify-between items-center mb-2">
           <label className="text-lg font-stopsn">Write your review</label>
-          <span className="text-sm text-gray-600 font-custom font-medium">
+          {/* <span className="text-sm text-gray-600 font-custom font-medium">
             🧠 <u>Review tips</u>
-          </span>
+          </span> */}
         </div>
         <textarea
           className={`w-full min-h-[120px] rounded-md p-4 outline font-custom resize-none focus:outline-none focus:ring-2 ${
@@ -125,7 +140,21 @@ export default function TestimonialInput({
       </div>
 
       {/* Submit Button */}
-      <div className="text-right">
+      <div className="flex justify-between items-center">
+        {statusMessage ? (
+          <p
+            className={`font-custom text-xs md:text-sm ${
+              statusMessage.type === "error" ? "text-red-600" : "text-green-600"
+            }`}
+          >
+            {statusMessage.message}
+          </p>
+        ) : (
+          <p className="font-custom text-xs md:text-sm text-dark">
+            Share pengalaman anda bersama Chatour.
+          </p>
+        )}
+
         <button
           onClick={handleSubmit}
           disabled={!canSubmit}

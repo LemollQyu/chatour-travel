@@ -5,7 +5,10 @@ import CardGallery from "./CardGallery";
 
 const ContentGallery = () => {
   return (
-    <div className="w-full bg-base">
+    <div
+      className="w-full bg-base"
+      style={{ backgroundImage: "url('/image/bg/noise.webp')" }}
+    >
       <div className="w-full hidden sm:flex flex-row border overflow-hidden px-4 gap-4">
         {/* Kiri: About Content (40%) */}
         <div

@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const VirtualHaromain = () => {
   return (
-    <div className="h-screen pb-0  md:pb-8  px-4 sm:px-6 lg:px-16 w-full bg-base">
+    <div className="h-screen pb-0  md:pb-8  px-4 sm:px-6 lg:px-16 w-full bg-dark">
       <div className="relative mx-auto lg:h-screen h-5/6  w-full overflow-hidden rounded-xl">
         {/* Background Video */}
         <video

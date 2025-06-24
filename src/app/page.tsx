@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Banner from "./components/Banner";
 import Navigasi from "./components/Navigasi";
 import BoxProgram from "./components/program/BoxProgram";
@@ -10,6 +11,7 @@ import Footer from "./components/Footer";
 import Pimpinan from "./components/Pimpinan";
 import Fasilitas from "./components/Fasilitas";
 import Testimonials from "./components/Testimonial";
+import AirlineSlider from "./components/AfiliasiPenerbangan";
 
 export default function Home() {
   return (
@@ -51,9 +53,12 @@ export default function Home() {
                 jawab.
               </p>
             </div>
-            <button className="mt-6 border-2 border-base font-stopsn  hover:border-accentt bg-transparent hover:bg-accentt transition-all duration-75   text-sm h-full w-1/2 flex px-4 py-2 rounded-md items-center justify-center text-base hover:text-dark hover:font-medium">
+            <Link
+              href={"/layanan"}
+              className="mt-6 border-2 border-base font-stopsn  hover:border-accentt bg-transparent hover:bg-accentt transition-all duration-75   text-sm h-full w-1/2 flex px-4 py-2 rounded-md items-center justify-center text-base hover:text-dark hover:font-medium"
+            >
               Package
-            </button>
+            </Link>
           </div>
         </div>
         <div className="relative h-[275px] w-full lg:w-[922px] lg:h-[518px]  lg:mx-auto">
@@ -62,16 +67,20 @@ export default function Home() {
         </div>
       </div>
       <BoxProgram />
-      <div className="w-full bg-base md:h-12 h-10 "></div>
+      <div className="w-full bg-dark md:h-12 h-10 "></div>
       <VirtualHaromain />
-      <div className="w-full bg-base md:h-12 h-0 "></div>
+      <div className="w-full bg-dark md:h-12 h-0 "></div>
       <Fasilitas />
 
       <Pimpinan />
 
       <Testimonials />
+      <AirlineSlider />
       <Gallery />
-      <div className="w-full bg-base md:h-12 h-10 "></div>
+      <div
+        style={{ backgroundImage: "url('/image/bg/noise.webp')" }}
+        className="w-full bg-base md:h-14 h-10 border-b border-dark "
+      ></div>
 
       <Footer />
     </>

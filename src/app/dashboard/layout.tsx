@@ -5,7 +5,7 @@ import { FaHotel } from "react-icons/fa";
 import { FaSuitcase } from "react-icons/fa";
 import { FaPlane } from "react-icons/fa";
 import { HiMenu } from "react-icons/hi";
-import { FiMapPin } from "react-icons/fi";
+import { FiMapPin, FiMessageCircle } from "react-icons/fi";
 import Link from "next/link";
 
 export default async function DashboardLayout({
@@ -71,6 +71,14 @@ export default async function DashboardLayout({
                 className="transition-all w-8 h-8 bg-primary focus:border-accent focus:bg-base hover:border-accent hover:border-2 focus:border-2 border-transparent rounded-full flex items-center justify-center"
               >
                 <FiMapPin className="text-secondary text-xs md:text-lg" />
+              </Link>
+            </div>
+            <div className="w-full flex items-center justify-center h-16">
+              <Link
+                href={"/dashboard/pesan"}
+                className="transition-all w-8 h-8 bg-primary focus:border-accent focus:bg-base hover:border-accent hover:border-2 focus:border-2 border-transparent rounded-full flex items-center justify-center"
+              >
+                <FiMessageCircle className="text-secondary text-xs md:text-lg" />
               </Link>
             </div>
           </div>

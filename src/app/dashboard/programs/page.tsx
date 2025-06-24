@@ -91,8 +91,11 @@ export default function Programs() {
 
   return (
     <>
-      <div className="px-5 w-full flex items-center justify-between">
-        <h1 className="font-stopsn">Packages</h1>
+      <div
+        className="px-5 w-full flex items-center justify-between pt-4"
+        style={{ backgroundImage: "url('/image/bg/noise.webp')" }}
+      >
+        <h1 className="font-stopsn text-lg">Packages</h1>
         <button
           onClick={handleClick}
           className="transition-all w-8 h-8 bg-white focus:border-accent focus:bg-base hover:border-accent hover:border-2 focus:border-2 border-transparent rounded-full flex items-center justify-center"
@@ -127,7 +130,10 @@ export default function Programs() {
 
       {/* tampilan datanya  */}
 
-      <div className="grid font-custom  grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+      <div
+        className="grid font-custom  grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4"
+        style={{ backgroundImage: "url('/image/bg/noise.webp')" }}
+      >
         {packages.map((pkg) => (
           <div
             key={pkg.id}

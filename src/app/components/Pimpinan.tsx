@@ -5,9 +5,9 @@ export default function Pimpinan() {
     <>
       <div
         style={{ backgroundImage: "url('/image/bg/noise.webp')" }}
-        className="bg-base"
+        className="bg-accent border-t border-dark"
       >
-        <h1 className="relative font-stopsn text-center text-xl md:text-2xl tracking-wider pb-8 ">
+        <h1 className="relative font-stopsn text-center text-xl md:text-2xl tracking-wider py-6 ">
           Pimpinan & Direksi Chatour Travel
           {/* Garis bawah utama */}
         </h1>
@@ -15,7 +15,7 @@ export default function Pimpinan() {
       {/* gambar */}
       <div
         style={{ backgroundImage: "url('/image/bg/noise.webp')" }}
-        className="flex bg-base w-full md:flex-row flex-col pb-8 items-center justify-center gap-6 h-full"
+        className="flex bg-accent w-full md:flex-row flex-col border-b border-dark pb-8 items-center justify-center gap-6 h-full"
       >
         <div className="w-full md:w-[30%] max-w-[292px] aspect-[1/1] relative overflow-hidden rounded-md  cursor-pointer  group">
           <Image

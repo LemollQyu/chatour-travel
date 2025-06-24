@@ -131,7 +131,10 @@ export default function Hotels() {
         </div>
       )}
 
-      <div className="w-full sm:flex-row flex-col flex">
+      <div
+        className="w-full sm:flex-row flex-col flex"
+        style={{ backgroundImage: "url('/image/bg/noise.webp')" }}
+      >
         <div
           className={`w-full sm:hidden block ${formTinggi} duration-500 transition-all bg-white`}
         >

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import TestimonialInput from "./InputTestimonial";
 import { createClient } from "@/utils/supabase/client";
+import TestimonialSkeleton from "./TestimonialSkelton"; // ← import dulu
 
 interface Testimonial {
   name: string;
@@ -93,7 +94,11 @@ export default function Testimonials() {
 
         <div className="max-w-4xl mx-auto space-y-10">
           {loading ? (
-            <p className="text-center text-dark">Memuat testimonial...</p>
+            <>
+              {[...Array(4)].map((_, idx) => (
+                <TestimonialSkeleton key={idx} />
+              ))}
+            </>
           ) : testimonials.length === 0 ? (
             <p className="text-center text-dark">Belum ada testimonial.</p>
           ) : (
@@ -116,7 +121,7 @@ export default function Testimonials() {
 
           <button
             onClick={() => setAda(true)}
-            className="bg-dark rounded-xl py-2 px-6 font-stopsn text-lg text-base transition-all hover:text-accentt border-transparent hover:border-accentt border-2"
+            className="bg-dark rounded-xl py-1 md:py-2 px-6 font-stopsn text-lg text-base transition-all hover:text-accentt border-transparent hover:border-accentt border-2"
           >
             Reviews
           </button>

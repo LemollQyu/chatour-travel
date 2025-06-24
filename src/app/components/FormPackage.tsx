@@ -31,6 +31,7 @@ export default function FormPerjalanan({ onSuccessSubmit }: FormPackageProps) {
   const [form, setForm] = useState({
     title: "",
     day: 0,
+    jenisPaket: "",
     tanggalKeberangkatan: "",
     hotelMakkah: "",
     hotelMadinah: "",
@@ -124,6 +125,7 @@ export default function FormPerjalanan({ onSuccessSubmit }: FormPackageProps) {
     const formData = new FormData();
     formData.append("title", form.title);
     formData.append("day", form.day.toString());
+    formData.append("jenisPaket", form.jenisPaket);
     formData.append("tanggal_keberangkatan", form.tanggalKeberangkatan);
     formData.append("hotel_makkah_id", form.hotelMakkah);
     formData.append("hotel_madinah_id", form.hotelMadinah);
@@ -156,6 +158,7 @@ export default function FormPerjalanan({ onSuccessSubmit }: FormPackageProps) {
       setForm({
         title: "",
         day: 0,
+        jenisPaket: "",
         tanggalKeberangkatan: "",
         hotelMakkah: "",
         hotelMadinah: "",
@@ -177,6 +180,8 @@ export default function FormPerjalanan({ onSuccessSubmit }: FormPackageProps) {
 
     setLoading(false);
   }
+
+  const listJenisPaket = ["2 Free 1", "Hemat", "Promo", "Reguler"];
 
   return (
     <form
@@ -220,6 +225,7 @@ export default function FormPerjalanan({ onSuccessSubmit }: FormPackageProps) {
         <input
           type="text"
           name="title"
+          placeholder="Nama paket"
           value={form.title}
           onChange={handleChange}
           required
@@ -239,6 +245,27 @@ export default function FormPerjalanan({ onSuccessSubmit }: FormPackageProps) {
           required
           className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
+      </div>
+
+      {/* Jenis paket */}
+      <div>
+        <label className="block font-bold mb-1">
+          Jenis paket <span className="text-red-500">*</span>
+        </label>
+        <select
+          name="jenisPaket"
+          value={form.jenisPaket}
+          onChange={handleChange}
+          required
+          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          <option value="">Pilih</option>
+          {listJenisPaket.map((jenis, id) => (
+            <option key={id} value={jenis.toLowerCase()}>
+              {jenis}
+            </option>
+          ))}
+        </select>
       </div>
       {/* Tanggal Keberangkatan */}
       <div>
@@ -388,6 +415,7 @@ export default function FormPerjalanan({ onSuccessSubmit }: FormPackageProps) {
         <input
           type="number"
           name="price"
+          placeholder="Rp."
           value={form.price}
           onChange={handleChange}
           required

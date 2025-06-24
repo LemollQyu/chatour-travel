@@ -1,7 +1,10 @@
 "use client";
+import { useRouter } from "next/navigation";
 
 import { useState, useEffect, useRef } from "react";
 export default function CardSearchPackage() {
+  const router = useRouter();
+
   const mdDropdownRef = useRef<HTMLDivElement>(null);
   const mobileDropdownRef = useRef<HTMLDivElement>(null);
   const [selected, setSelected] = useState<"umroh" | "haji">("umroh");
@@ -55,6 +58,7 @@ export default function CardSearchPackage() {
 
   const handleClick = () => {
     console.log(selected, selectedMonth, selectedPaket);
+    router.push("/layanan"); // Navigasi ke halaman /layanan
   };
   return (
     <>

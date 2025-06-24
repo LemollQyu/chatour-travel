@@ -7,8 +7,14 @@ import AccordionSection from "./AcordionSection";
 const Footer = () => {
   return (
     <>
-      <div className="flex w-full flex-start bg-base">
-        <div className="hidden lg:flex w-full justify-start bg-gradient-to-r from-accentt to-accent py-10 px-12">
+      <div
+        className="flex w-full flex-start bg-accent"
+        style={{ backgroundImage: "url('/image/bg/noise.webp')" }}
+      >
+        <div
+          className="hidden lg:flex w-full justify-start bg-gradient-to-r from-accentt to-accent py-10 px-12"
+          style={{ backgroundImage: "url('/image/bg/noise.webp')" }}
+        >
           <div className="flex w-5/6  max-w-7xl justify-between gap-12">
             {/* Logo + Nama */}
             <div className="flex items-center gap-4">
@@ -88,7 +94,10 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="hidden md:flex lg:hidden bg-gradient-to-r w-full px-4 from-accentt to-accent justify-start flex-col py-6">
+        <div
+          className="hidden md:flex lg:hidden bg-gradient-to-r w-full px-4 from-accentt to-accent justify-start flex-col py-6"
+          style={{ backgroundImage: "url('/image/bg/noise.webp')" }}
+        >
           <div className="flex w-5/6 flex-col">
             <div className="flex items-center -ml-5">
               <Image
@@ -168,7 +177,10 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="flex md:hidden bg-gradient-to-r w-full px-4 from-accentt to-accent justify-between flex-col py-6">
+        <div
+          className="flex md:hidden bg-gradient-to-r w-full px-4 from-accentt to-accent justify-between flex-col py-6"
+          style={{ backgroundImage: "url('/image/bg/noise.webp')" }}
+        >
           <div className="flex -ml-5 items-center w-full justify-center ">
             <Image
               src={"/icon/icon-logo-dark.png"}
@@ -212,12 +224,21 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <div className="bg-gradient-to-r px-16  border-t py-6 border-dark from-accentt to-accent w-full">
-        <div className="bg-gradient-to-r cursor-pointer rounded-full shadow-lg  z-50  w-12 h-12 from-accent to-base fixed bottom-2 left-2 flex justify-center items-center">
+      <div
+        className=" pl-16 pr-4 border-t py-6 flex items-center border-dark bg-dark justify-end w-full"
+        style={{ backgroundImage: "url('/image/bg/noise.webp')" }}
+      >
+        <div className="bg-gradient-to-r cursor-pointer rounded-full shadow-lg  z-50  w-12 h-12 from-accent to-base fixed bottom-3 left-2 flex justify-center items-center">
           <Image src={"/icon/icon-logo-dark.png"} fill alt="icon" />
         </div>
-        <p className="font-custom md:text-sm text-xs font-bold tracking-wider">
-          Credit By@aaanns
+        <p className=" md:text-sm text-xs  text-base  tracking-wider">
+          <span className="font-stopsn">Credit By</span>
+          <Link
+            href={"https://www.instagram.com/_aaaanns/"}
+            className="font-custom hover:underline"
+          >
+            @_aaaanns
+          </Link>
         </p>
       </div>
     </>

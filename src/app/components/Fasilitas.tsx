@@ -47,7 +47,7 @@ export default function Fasilitas() {
 
   return (
     <section
-      className="bg-base py-16 px-4"
+      className="bg-base pt-8 pb-16 px-4"
       style={{ backgroundImage: "url('/image/bg/noise.webp')" }}
     >
       <div>

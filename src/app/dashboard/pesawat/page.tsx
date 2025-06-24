@@ -31,7 +31,10 @@ export default async function Pesawat() {
   return (
     <>
       <AlertErrorFromSearchParams />
-      <div className="w-full sm:hidden flex-cols flex sm:flex-row">
+      <div
+        className="w-full sm:hidden flex-cols flex sm:flex-row"
+        style={{ backgroundImage: "url('/image/bg/noise.webp')" }}
+      >
         <div className="w-full">
           <div className="sm:hidden block">
             <FormToggle data={pesawatDataRaw}>

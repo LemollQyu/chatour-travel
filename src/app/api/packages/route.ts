@@ -16,6 +16,7 @@ export async function POST(req: NextRequest) {
   const bandara_tiba_id = formData.get("bandara_tiba_id") as string;
   const price = formData.get("price") as string;
   const day = parseInt(formData.get("day") as string, 10);
+  const jenis_paket = formData.get("jenisPaket") as string;
 
   const image = formData.get("image") as File | null;
   let image_package = "";
@@ -47,6 +48,7 @@ export async function POST(req: NextRequest) {
     {
       title,
       day,
+      jenis_paket,
       tanggal_keberangkatan,
       hotel_makkah_id,
       hotel_madinah_id,
@@ -60,9 +62,9 @@ export async function POST(req: NextRequest) {
   ]);
 
   if (error) {
-    console.error("Insert error:", error.message);
+    console.error("Insert error:", error); // bukan hanya .message
     return NextResponse.json(
-      { error: "Gagal simpan data package" },
+      { error: error.message }, // biar tahu error asli di client
       { status: 500 }
     );
   }
