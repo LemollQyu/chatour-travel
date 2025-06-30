@@ -1,11 +1,10 @@
 "use client";
+import dynamic from "next/dynamic";
 
-export default function Layanan() {
-  return (
-    <>
-      <div className="w-full">
-        <p>Layanan</p>
-      </div>
-    </>
-  );
+const LayananClient = dynamic(() => import("./LayananClient"), {
+  ssr: false,
+});
+
+export default function LayananPage() {
+  return <LayananClient />;
 }

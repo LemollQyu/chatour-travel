@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
-import { createClient } from "@/utils/supabase/client";
+import { supabase } from "@/lib/supabaseClient";
+
 import { FiTrash } from "react-icons/fi";
 
 type Testimonial = {
@@ -14,7 +15,7 @@ const Pesan = () => {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [loading, setLoading] = useState(true);
   const [confirmDelete, setConfirmDelete] = useState<Testimonial | null>(null);
-  const supabase = createClient();
+
   const [isDeleting, setIsDeleting] = useState(false);
 
   const cancelDelete = () => setConfirmDelete(null);

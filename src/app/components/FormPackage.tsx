@@ -31,6 +31,7 @@ export default function FormPerjalanan({ onSuccessSubmit }: FormPackageProps) {
   const [form, setForm] = useState({
     title: "",
     day: 0,
+    jenisPerjalanan: "",
     jenisPaket: "",
     tanggalKeberangkatan: "",
     hotelMakkah: "",
@@ -125,6 +126,7 @@ export default function FormPerjalanan({ onSuccessSubmit }: FormPackageProps) {
     const formData = new FormData();
     formData.append("title", form.title);
     formData.append("day", form.day.toString());
+    formData.append("jenis_perjalanan", form.jenisPerjalanan);
     formData.append("jenisPaket", form.jenisPaket);
     formData.append("tanggal_keberangkatan", form.tanggalKeberangkatan);
     formData.append("hotel_makkah_id", form.hotelMakkah);
@@ -158,6 +160,7 @@ export default function FormPerjalanan({ onSuccessSubmit }: FormPackageProps) {
       setForm({
         title: "",
         day: 0,
+        jenisPerjalanan: "",
         jenisPaket: "",
         tanggalKeberangkatan: "",
         hotelMakkah: "",
@@ -247,6 +250,24 @@ export default function FormPerjalanan({ onSuccessSubmit }: FormPackageProps) {
         />
       </div>
 
+      {/* Jenis perjalanan */}
+      <div>
+        <label className="block font-bold mb-1">
+          Jenis Perjalanan <span className="text-red-500">*</span>
+        </label>
+        <select
+          name="jenisPerjalanan"
+          value={form.jenisPerjalanan}
+          onChange={handleChange}
+          required
+          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          <option value="">Pilih</option>
+          <option value="umroh">Umroh</option>
+          <option value="haji">Haji</option>
+        </select>
+      </div>
+
       {/* Jenis paket */}
       <div>
         <label className="block font-bold mb-1">
@@ -267,6 +288,7 @@ export default function FormPerjalanan({ onSuccessSubmit }: FormPackageProps) {
           ))}
         </select>
       </div>
+
       {/* Tanggal Keberangkatan */}
       <div>
         <label className="block font-bold mb-1">

@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 import { FiChevronRight } from "react-icons/fi";
@@ -228,9 +229,6 @@ const Footer = () => {
         className=" pl-16 pr-4 border-t py-6 flex items-center border-dark bg-dark justify-end w-full"
         style={{ backgroundImage: "url('/image/bg/noise.webp')" }}
       >
-        <div className="bg-gradient-to-r cursor-pointer rounded-full shadow-lg  z-50  w-12 h-12 from-accent to-base fixed bottom-3 left-2 flex justify-center items-center">
-          <Image src={"/icon/icon-logo-dark.png"} fill alt="icon" />
-        </div>
         <p className=" md:text-sm text-xs  text-base  tracking-wider">
           <span className="font-stopsn">Credit By</span>
           <Link

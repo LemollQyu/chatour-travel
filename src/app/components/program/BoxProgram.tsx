@@ -46,7 +46,7 @@ const BoxProgram = () => {
                   <CardPackageSkeleton />
                 </div>
               ))
-            : packages.map((item, index) => (
+            : packages?.map((item, index) => (
                 <div
                   key={index}
                   className="flex-shrink-0 w-[70%] xs:w-[50%] sm:w-[220px] md:w-[240px] lg:w-[300px]"

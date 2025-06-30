@@ -17,6 +17,7 @@ export async function POST(req: NextRequest) {
   const price = formData.get("price") as string;
   const day = parseInt(formData.get("day") as string, 10);
   const jenis_paket = formData.get("jenisPaket") as string;
+  const jenis_perjalanan = formData.get("jenis_perjalanan") as string;
 
   const image = formData.get("image") as File | null;
   let image_package = "";
@@ -48,6 +49,7 @@ export async function POST(req: NextRequest) {
     {
       title,
       day,
+      jenis_perjalanan,
       jenis_paket,
       tanggal_keberangkatan,
       hotel_makkah_id,
@@ -72,41 +74,51 @@ export async function POST(req: NextRequest) {
   return NextResponse.json({ success: true, data });
 }
 
-// get data
-export async function GET() {
+export async function GET(request: Request) {
   const supabase = await createClient();
+  const { searchParams } = new URL(request.url);
 
-  const { data, error } = await supabase.from("package").select(`
+  const jenisPerjalanan = searchParams.get("jenis_perjalanan");
+  const bulanTahun = searchParams.get("bulan_tahun"); // e.g., "2025-07"
+  const jenisPaket = searchParams.get("jenis_paket");
+
+  let query = supabase.from("package").select(`
     *,
-    hotel_makkah:hotel_makkah_id (
-      id, name, images
-    ),
-    hotel_madinah:hotel_madinah_id (
-      id, name, images
-    ),
-    pesawat:pesawat_id (
-      id, nama_pesawat
-    ),
-    bandara_awal:bandara_awal_id (
-      id, name
-    ),
-    transit:transit_id (
-      id, name
-    ),
-    bandara_tiba:bandara_tiba_id (
-      id, name
-    )
+    hotel_makkah:hotel_makkah_id (id, name, images),
+    hotel_madinah:hotel_madinah_id (id, name, images),
+    pesawat:pesawat_id (id, nama_pesawat),
+    bandara_awal:bandara_awal_id (id, name),
+    transit:transit_id (id, name),
+    bandara_tiba:bandara_tiba_id (id, name)
   `);
 
+  if (jenisPerjalanan) {
+    query = query.eq("jenis_perjalanan", jenisPerjalanan);
+  }
+
+  if (jenisPaket) {
+    query = query.eq("jenis_paket", jenisPaket);
+  }
+
+  if (bulanTahun) {
+    const [year, month] = bulanTahun.split("-").map(Number);
+    const startDate = new Date(year, month - 1, 1); // e.g., 2025-07-01
+    const endDate = new Date(year, month, 1); // e.g., 2025-08-01
+
+    query = query.gte("tanggal_keberangkatan", startDate.toISOString());
+    query = query.lt("tanggal_keberangkatan", endDate.toISOString());
+  }
+
+  const { data, error } = await query;
+
   if (error) {
-    console.error("Fetch error:", error.message);
+    console.error("Supabase error detail:", error);
     return NextResponse.json(
       { error: "Gagal mengambil data package" },
       { status: 500 }
     );
   }
 
-  // Generate URL publik untuk image_package dan hotel images
   const enrichedData = data.map((pkg) => {
     const { data: packageImage } = supabase.storage
       .from("program-banners")
